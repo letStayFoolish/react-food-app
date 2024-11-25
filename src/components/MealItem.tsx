@@ -1,11 +1,28 @@
 import React from "react";
+import { BACKEND_URL } from "../config.ts";
 
-const MealItem: React.FC = () => {
+type Props = {
+  description: string;
+  image: string;
+  name: string;
+  price: string;
+};
+
+const MealItem: React.FC<Props> = ({ name, price, description, image }) => {
   return (
-    <div className="meal-item">
-      <article>Meal Item</article>
-      <img src="" alt="" />
-    </div>
+    <li className="meal-item">
+      <article>
+        <img src={`${BACKEND_URL}/${image}`} alt={description} />
+        <div>
+          <h3>{name}</h3>
+          <p className="meal-item-price">{price}</p>
+          <p className="meal-item-description">{description}</p>
+        </div>
+        <p className="meal-item-actions">
+          <button>Add to cart</button>
+        </p>
+      </article>
+    </li>
   );
 };
 
