@@ -1,5 +1,6 @@
 import React from "react";
 import headerLogo from "../assets/logo.jpg";
+import Button from "../ui/Button.tsx";
 const Header: React.FC = () => {
   return (
     <header id="main-header">
@@ -8,7 +9,7 @@ const Header: React.FC = () => {
         <h1>React Food</h1>
       </div>
       <nav>
-        <button>Cart (0)</button>
+        <Button textOnly>Cart (0)</Button>
       </nav>
     </header>
   );

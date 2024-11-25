@@ -1,6 +1,7 @@
 import React from "react";
 import { BACKEND_URL } from "../config.ts";
 import { currencyFormatter } from "../util";
+import Button from "../ui/Button.tsx";
 
 type Props = {
   description: string;
@@ -22,7 +23,7 @@ const MealItem: React.FC<Props> = ({ name, price, description, image }) => {
           <p className="meal-item-description">{description}</p>
         </div>
         <p className="meal-item-actions">
-          <button>Add to cart</button>
+          <Button>Add to cart</Button>
         </p>
       </article>
     </li>
