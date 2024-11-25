@@ -1,11 +1,14 @@
 import Header from "./components/Header.tsx";
 import Meals from "./components/Meals.tsx";
+import CartProvider from "./store";
 
 function App() {
   return (
     <>
-      <Header />
-      <Meals />
+      <CartProvider>
+        <Header />
+        <Meals />
+      </CartProvider>
     </>
   );
 }

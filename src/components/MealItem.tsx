@@ -2,15 +2,23 @@ import React from "react";
 import { BACKEND_URL } from "../config.ts";
 import { currencyFormatter } from "../util";
 import Button from "../ui/Button.tsx";
+import { useCartContext } from "../store/useCartContext.ts";
 
 type Props = {
+  id: string;
   description: string;
   image: string;
   name: string;
   price: string;
 };
 
-const MealItem: React.FC<Props> = ({ name, price, description, image }) => {
+const MealItem: React.FC<Props> = ({ id, name, price, description, image }) => {
+  const cartCtx = useCartContext();
+
+  const handleAddMealToCart = () => {
+    cartCtx?.addItems(id);
+  };
+
   return (
     <li className="meal-item">
       <article>
@@ -23,7 +31,7 @@ const MealItem: React.FC<Props> = ({ name, price, description, image }) => {
           <p className="meal-item-description">{description}</p>
         </div>
         <p className="meal-item-actions">
-          <Button>Add to cart</Button>
+          <Button onClick={handleAddMealToCart}>Add to cart</Button>
         </p>
       </article>
     </li>
