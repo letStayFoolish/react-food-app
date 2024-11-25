@@ -1,5 +1,6 @@
 import React from "react";
 import { BACKEND_URL } from "../config.ts";
+import { currencyFormatter } from "../util";
 
 type Props = {
   description: string;
@@ -15,7 +16,9 @@ const MealItem: React.FC<Props> = ({ name, price, description, image }) => {
         <img src={`${BACKEND_URL}/${image}`} alt={description} />
         <div>
           <h3>{name}</h3>
-          <p className="meal-item-price">{price}</p>
+          <p className="meal-item-price">
+            {currencyFormatter.format(Number(price))}
+          </p>
           <p className="meal-item-description">{description}</p>
         </div>
         <p className="meal-item-actions">
