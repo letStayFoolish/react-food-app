@@ -5,6 +5,13 @@ import { useCartContext } from "../store/useCartContext.ts";
 const Header: React.FC = () => {
   const cartCtx = useCartContext();
 
+  console.log("ITEMS: ", cartCtx?.items);
+
+  const totalCartItemsQty = cartCtx?.items.reduce(
+    (totalNumberOfItems, item) => totalNumberOfItems + item.quantity,
+    0,
+  );
+
   return (
     <header id="main-header">
       <div id="title">
@@ -12,7 +19,7 @@ const Header: React.FC = () => {
         <h1>React Food</h1>
       </div>
       <nav>
-        <Button textOnly>Cart ({cartCtx?.items?.length})</Button>
+        <Button textOnly>Cart ({totalCartItemsQty})</Button>
       </nav>
     </header>
   );

@@ -1,7 +1,18 @@
+import { TMeal } from "../types";
+
 export type TCartState = {
-  items: TItem[];
-  addItems: (id: string) => void;
-  removeItem: (id: string) => void;
+  items: TCartItem[];
+  addItems: (item: TMeal) => void;
+  removeItem: (item: TMeal) => void;
+};
+
+export type TCartItem = {
+  id: string;
+  name: string;
+  price: string;
+  description: string;
+  image: string;
+  quantity: number;
 };
 
 export type TItem = {

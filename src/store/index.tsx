@@ -1,10 +1,6 @@
 import React, { createContext, PropsWithChildren, useReducer } from "react";
-import {
-  ACTION_TYPES,
-  type TAction,
-  type TCartState,
-  type TItem,
-} from "./type.ts";
+import { ACTION_TYPES, type TAction, type TCartState } from "./type.ts";
+import { TMeal } from "../types";
 
 const initialState: TCartState = {
   items: [],
@@ -12,11 +8,11 @@ const initialState: TCartState = {
   removeItem: () => {},
 };
 
-function cartReducer(state: TCartState, action: TAction<TItem["id"]>) {
+function cartReducer(state: TCartState, action: TAction<TMeal>) {
   // Adding Items
   if (action.type === ACTION_TYPES.ADD_ITEM) {
     const existingCartItemIndex = state.items.findIndex(
-      (item) => item.id === action.payload,
+      (item) => item.id === action.payload.id,
     );
 
     const updatedItems = [...state.items];
@@ -34,7 +30,8 @@ function cartReducer(state: TCartState, action: TAction<TItem["id"]>) {
     } else {
       // item is not added
       updatedItems.push({
-        id: action.payload,
+        ...action.payload,
+        id: action.payload.id,
         quantity: 1,
       });
     }
@@ -45,7 +42,7 @@ function cartReducer(state: TCartState, action: TAction<TItem["id"]>) {
   } else if (action.type === ACTION_TYPES.REMOVE_ITEM) {
     // Remove item logic...
     const existingCartItemIndex = state.items.findIndex(
-      (item) => item.id === action.payload,
+      (item) => item.id === action.payload.id,
     );
     const existingCartItem = state.items[existingCartItemIndex];
 
@@ -62,7 +59,7 @@ function cartReducer(state: TCartState, action: TAction<TItem["id"]>) {
       updateItems[existingCartItemIndex] = updatedItem;
     }
 
-    return { ...state, items: updateItems };
+    return { ...state, items: updateItems }; // copy the old state and update items!
   }
 
   return state;
@@ -79,17 +76,17 @@ const CartProvider: React.FC<PropsWithChildren> = ({ children }) => {
     removeItem,
   };
 
-  function addItems(itemId: string) {
+  function addItems(item: TMeal) {
     cartDispatchAction({
       type: ACTION_TYPES.ADD_ITEM,
-      payload: itemId,
+      payload: item,
     });
   }
 
-  function removeItem(ItemId: string) {
+  function removeItem(item: TMeal) {
     cartDispatchAction({
       type: ACTION_TYPES.REMOVE_ITEM,
-      payload: ItemId,
+      payload: item,
     });
   }
 

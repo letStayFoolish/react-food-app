@@ -3,20 +3,19 @@ import { BACKEND_URL } from "../config.ts";
 import { currencyFormatter } from "../util";
 import Button from "../ui/Button.tsx";
 import { useCartContext } from "../store/useCartContext.ts";
+import { TMeal } from "../types";
 
 type Props = {
-  id: string;
-  description: string;
-  image: string;
-  name: string;
-  price: string;
+  item: TMeal;
 };
 
-const MealItem: React.FC<Props> = ({ id, name, price, description, image }) => {
+const MealItem: React.FC<Props> = ({ item }) => {
   const cartCtx = useCartContext();
 
+  const { name, description, image, price } = item;
+
   const handleAddMealToCart = () => {
-    cartCtx?.addItems(id);
+    cartCtx?.addItems(item);
   };
 
   return (
