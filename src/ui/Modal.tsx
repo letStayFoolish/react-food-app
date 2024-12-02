@@ -11,11 +11,13 @@ const Modal: React.FC<Props> = ({ children, className = "", open }) => {
   const modalRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
+    const modal = modalRef.current;
+
     if (open) {
-      modalRef.current?.showModal();
+      modal?.showModal();
     }
 
-    return;
+    return () => modal?.close();
   }, [open]);
 
   return createPortal(

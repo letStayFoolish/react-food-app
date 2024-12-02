@@ -1,4 +1,4 @@
-import { TMeal } from "../types";
+import { TMeal } from "../../types";
 
 export type TCartState = {
   items: TCartItem[];

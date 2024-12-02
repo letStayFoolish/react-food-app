@@ -1,6 +1,6 @@
 import React, { createContext, PropsWithChildren, useReducer } from "react";
 import { ACTION_TYPES, type TAction, type TCartState } from "./type.ts";
-import { TMeal } from "../types";
+import { TMeal } from "../../types";
 
 const initialState: TCartState = {
   items: [],

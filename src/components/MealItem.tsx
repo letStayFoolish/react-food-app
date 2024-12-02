@@ -2,8 +2,8 @@ import React from "react";
 import { BACKEND_URL } from "../config.ts";
 import { currencyFormatter } from "../util";
 import Button from "../ui/Button.tsx";
-import { useCartContext } from "../store/useCartContext.ts";
 import { TMeal } from "../types";
+import { useCartContext } from "../store/CartContext/useCartContext.ts";
 
 type Props = {
   item: TMeal;

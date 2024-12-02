@@ -1,14 +1,19 @@
 import Header from "./components/Header.tsx";
 import Meals from "./components/Meals.tsx";
-import CartProvider from "./store";
+import UserProgressProvider from "./store/UserProgress";
+import CartProvider from "./store/CartContext";
+import Cart from "./components/Cart.tsx";
 
 function App() {
   return (
     <>
-      <CartProvider>
-        <Header />
-        <Meals />
-      </CartProvider>
+      <UserProgressProvider>
+        <CartProvider>
+          <Header />
+          <Meals />
+          <Cart />
+        </CartProvider>
+      </UserProgressProvider>
     </>
   );
 }
