@@ -13,7 +13,7 @@ const Cart: React.FC = () => {
   if (!cartCtx) return;
   const { items } = cartCtx;
 
-  const cartQty = items?.reduce(
+  const totalPrice = items?.reduce(
     (prevValue, currentValue) =>
       prevValue + currentValue.quantity * Number(currentValue.price),
     0,
@@ -23,8 +23,18 @@ const Cart: React.FC = () => {
     userProgressCtx?.hideCart();
   };
 
+  const handleOpenCheckout = () => {
+    userProgressCtx?.showCheckout();
+  };
+
   return (
-    <Modal className="cart" open={userProgressCtx?.progress === "cart"}>
+    <Modal
+      className="cart"
+      open={userProgressCtx?.progress === "cart"}
+      onClose={
+        userProgressCtx?.progress === "cart" ? handleCloseCart : () => {}
+      }
+    >
       <h2>Your Cart</h2>
       <ul>
         {items &&
@@ -39,12 +49,14 @@ const Cart: React.FC = () => {
             />
           ))}
       </ul>
-      <p className="cart-total">{currencyFormatter.format(cartQty)}</p>
+      <p className="cart-total">{currencyFormatter.format(totalPrice)}</p>
       <p className="modal-actions">
         <Button textOnly onClick={handleCloseCart}>
           Close
         </Button>
-        <Button onClick={handleCloseCart}>Go to checkout</Button>
+        {items.length > 0 && (
+          <Button onClick={handleOpenCheckout}>Go to checkout</Button>
+        )}
       </p>
     </Modal>
   );

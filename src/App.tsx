@@ -3,6 +3,7 @@ import Meals from "./components/Meals.tsx";
 import UserProgressProvider from "./store/UserProgress";
 import CartProvider from "./store/CartContext";
 import Cart from "./components/Cart.tsx";
+import Checkout from "./components/Checkout.tsx";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
           <Header />
           <Meals />
           <Cart />
+          <Checkout />
         </CartProvider>
       </UserProgressProvider>
     </>

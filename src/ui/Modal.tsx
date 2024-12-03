@@ -5,9 +5,15 @@ type Props = {
   children: ReactNode;
   className: string;
   open: boolean;
+  onClose: () => void;
 };
 
-const Modal: React.FC<Props> = ({ children, className = "", open }) => {
+const Modal: React.FC<Props> = ({
+  children,
+  className = "",
+  open,
+  onClose,
+}) => {
   const modalRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
@@ -21,7 +27,7 @@ const Modal: React.FC<Props> = ({ children, className = "", open }) => {
   }, [open]);
 
   return createPortal(
-    <dialog ref={modalRef} className={`modal ${className}`}>
+    <dialog ref={modalRef} className={`modal ${className}`} onClose={onClose}>
       {children}
     </dialog>,
     document.getElementById("modal") as HTMLElement,
