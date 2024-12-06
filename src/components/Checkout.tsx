@@ -6,10 +6,27 @@ import Input from "../ui/Input.tsx";
 import Button from "../ui/Button.tsx";
 import { useUserProgressContext } from "../store/UserProgress";
 import { ORDERS } from "../config.ts";
+import { useHttp } from "../hooks/useHttp.ts";
+import ErrorComponent from "./ErrorComponent.tsx";
+
+const requestConfig = {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+};
 
 const Checkout: React.FC = () => {
   const cartCtx = useCartContext();
   const userProgressCtx = useUserProgressContext();
+
+  const {
+    data,
+    isLoading: isSending,
+    error,
+    sendHttp,
+    clearData,
+  } = useHttp(ORDERS, requestConfig);
 
   if (!cartCtx) return;
   const { items } = cartCtx;
@@ -24,6 +41,13 @@ const Checkout: React.FC = () => {
     userProgressCtx?.hideCheckout();
   };
 
+  const handleFinishCheckout = () => {
+    userProgressCtx?.hideCheckout();
+    // Clear cart...
+    cartCtx?.clearCart();
+    clearData();
+  };
+
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -31,27 +55,48 @@ const Checkout: React.FC = () => {
 
     const customer = Object.fromEntries(formData.entries()); // { email: example@email.com }
 
-    const checkout = async () => {
-      try {
-        await fetch(ORDERS, {
-          method: "POST",
-          body: JSON.stringify({
-            order: {
-              items: cartCtx.items,
-              customer,
-            },
-          }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-      } catch (error: any) {
-        console.log(error);
-      }
-    };
-
-    checkout();
+    sendHttp(
+      JSON.stringify({
+        order: {
+          items: cartCtx.items,
+          customer,
+        },
+      }),
+    );
   };
+
+  let actions = (
+    <>
+      <Button type="button" textOnly onClick={handleCloseModal}>
+        Close
+      </Button>
+      <Button type="submit">Submit Order</Button>
+    </>
+  );
+
+  if (isSending) {
+    actions = <span>Sending order data...</span>;
+  }
+
+  if (data && !error) {
+    return (
+      <Modal
+        className=""
+        open={userProgressCtx?.progress === "checkout"}
+        onClose={handleFinishCheckout}
+      >
+        <h2>Success!</h2>
+        <p>Your order was submitted successfully!</p>
+        <p>
+          We will back to you with more details via email within the next few
+          minutes.
+        </p>
+        <p className="modal-actions">
+          <Button onClick={handleFinishCheckout}>Okay</Button>
+        </p>
+      </Modal>
+    );
+  }
 
   return (
     <Modal
@@ -69,12 +114,12 @@ const Checkout: React.FC = () => {
           <Input label="Postal Code" id="postal-code" type="text" />
           <Input label="City" id="city" type="text" />
         </div>
-        <p className="modal-actions">
-          <Button type="button" textOnly onClick={handleCloseModal}>
-            Close
-          </Button>
-          <Button type="submit">Submit Order</Button>
-        </p>
+
+        {error && (
+          <ErrorComponent title="Failed to submit order" message={error} />
+        )}
+
+        <p className="modal-actions">{actions}</p>
       </form>
     </Modal>
   );

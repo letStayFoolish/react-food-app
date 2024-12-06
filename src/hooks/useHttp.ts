@@ -19,12 +19,19 @@ export function useHttp<T>(url: string, config: RequestInit) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
+  function clearData() {
+    setData(undefined);
+  }
+
   const sendHttp = useCallback(
-    async function sendHttp() {
+    async function sendHttp(requestBody?: BodyInit) {
       setIsLoading(true);
 
       try {
-        const resData: T = await sendHttpRequest(url, config);
+        const resData: T = await sendHttpRequest(url, {
+          ...config,
+          body: requestBody,
+        });
 
         setData(resData);
       } catch (error: any) {
@@ -44,5 +51,5 @@ export function useHttp<T>(url: string, config: RequestInit) {
     }
   }, [sendHttp, config]);
 
-  return { data, isLoading, error };
+  return { data, isLoading, error, sendHttp, clearData };
 }

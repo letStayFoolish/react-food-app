@@ -6,13 +6,14 @@ const initialState: TCartState = {
   items: [],
   addItems: () => {},
   removeItem: () => {},
+  clearCart: () => {},
 };
 
 function cartReducer(state: TCartState, action: TAction<TMeal>) {
   // Adding Items
   if (action.type === ACTION_TYPES.ADD_ITEM) {
     const existingCartItemIndex = state.items.findIndex(
-      (item) => item.id === action.payload.id,
+      (item) => item.id === action.payload?.id,
     );
 
     const updatedItems = [...state.items];
@@ -31,7 +32,7 @@ function cartReducer(state: TCartState, action: TAction<TMeal>) {
       // item is not added
       updatedItems.push({
         ...action.payload,
-        id: action.payload.id,
+        id: action.payload?.id,
         quantity: 1,
       });
     }
@@ -40,9 +41,8 @@ function cartReducer(state: TCartState, action: TAction<TMeal>) {
 
     // Remove Item
   } else if (action.type === ACTION_TYPES.REMOVE_ITEM) {
-    // Remove item logic...
     const existingCartItemIndex = state.items.findIndex(
-      (item) => item.id === action.payload.id,
+      (item) => item.id === action.payload?.id,
     );
     const existingCartItem = state.items[existingCartItemIndex];
 
@@ -60,6 +60,8 @@ function cartReducer(state: TCartState, action: TAction<TMeal>) {
     }
 
     return { ...state, items: updateItems }; // copy the old state and update items!
+  } else if (action.type === ACTION_TYPES.CLEAR_CART) {
+    return { ...state, items: [] };
   }
 
   return state;
@@ -74,6 +76,7 @@ const CartProvider: React.FC<PropsWithChildren> = ({ children }) => {
     items: cart.items,
     addItems,
     removeItem,
+    clearCart,
   };
 
   function addItems(item: TMeal) {
@@ -88,6 +91,10 @@ const CartProvider: React.FC<PropsWithChildren> = ({ children }) => {
       type: ACTION_TYPES.REMOVE_ITEM,
       payload: item,
     });
+  }
+
+  function clearCart() {
+    cartDispatchAction({ type: ACTION_TYPES.CLEAR_CART });
   }
 
   return (

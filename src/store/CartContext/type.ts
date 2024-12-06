@@ -4,6 +4,7 @@ export type TCartState = {
   items: TCartItem[];
   addItems: (item: TMeal) => void;
   removeItem: (item: TMeal) => void;
+  clearCart: () => void;
 };
 
 export type TCartItem = {
@@ -23,11 +24,12 @@ export type TItem = {
 export const ACTION_TYPES = {
   ADD_ITEM: "ADD_ITEM",
   REMOVE_ITEM: "REMOVE_ITEM",
+  CLEAR_CART: "CLEAR_CART",
 } as const;
 
 export type TActionValues = (typeof ACTION_TYPES)[keyof typeof ACTION_TYPES];
 
 export type TAction<T> = {
-  payload: T;
+  payload?: T;
   type: TActionValues;
 };
