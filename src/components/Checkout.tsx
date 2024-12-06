@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useActionState } from "react";
 import Modal from "../ui/Modal.tsx";
 import { currencyFormatter } from "../util";
 import { useCartContext } from "../store/CartContext/useCartContext.ts";
@@ -20,13 +20,24 @@ const Checkout: React.FC = () => {
   const cartCtx = useCartContext();
   const userProgressCtx = useUserProgressContext();
 
-  const {
-    data,
-    isLoading: isSending,
-    error,
-    sendHttp,
-    clearData,
-  } = useHttp(ORDERS, requestConfig);
+  const { data, error, sendHttp, clearData } = useHttp(ORDERS, requestConfig);
+
+  const checkoutAction = async (prevState: any, formData: FormData) => {
+    const customer = Object.fromEntries(formData.entries()); // { email: example@email.com }
+
+    await sendHttp(
+      JSON.stringify({
+        order: {
+          items: cartCtx?.items,
+          customer,
+        },
+      }),
+    );
+  };
+
+  const [formState, formAction, pending] = useActionState(checkoutAction, null);
+
+  console.log({ formState });
 
   if (!cartCtx) return;
   const { items } = cartCtx;
@@ -48,19 +59,6 @@ const Checkout: React.FC = () => {
     clearData();
   };
 
-  const checkoutAction = async (formData: FormData) => {
-    const customer = Object.fromEntries(formData.entries()); // { email: example@email.com }
-
-    await sendHttp(
-      JSON.stringify({
-        order: {
-          items: cartCtx.items,
-          customer,
-        },
-      }),
-    );
-  };
-
   let actions = (
     <>
       <Button type="button" textOnly onClick={handleCloseModal}>
@@ -70,7 +68,7 @@ const Checkout: React.FC = () => {
     </>
   );
 
-  if (isSending) {
+  if (pending) {
     actions = <span>Sending order data...</span>;
   }
 
@@ -100,7 +98,7 @@ const Checkout: React.FC = () => {
       open={userProgressCtx?.progress === "checkout"}
       onClose={handleCloseModal}
     >
-      <form action={checkoutAction}>
+      <form action={formAction}>
         <h2>Checkout</h2>
         <p className="">Total Amount: {currencyFormatter.format(totalPrice)}</p>
         <Input label="Full Name" id="name" type="text" />
