@@ -1,19 +1,26 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { TMeal } from "../types";
-import { fetchAllMeals } from "../api.ts";
+
 import MealItem from "./MealItem.tsx";
+import { useHttp } from "../hooks/useHttp.ts";
+import { GET_ALL_MEALS } from "../config.ts";
+
+const requestConfig: RequestInit = {};
 
 const Meals: React.FC = () => {
-  const [fetchedMeals, setFetchedMeals] = useState<TMeal[]>([]);
+  const {
+    data: fetchedMeals,
+    isLoading,
+    error,
+  } = useHttp<TMeal[]>(GET_ALL_MEALS, requestConfig);
 
-  useEffect(() => {
-    void (async () => {
-      const meals = await fetchAllMeals();
-      if (!meals || meals?.length === 0) return;
+  if (isLoading) {
+    return <p>Fetching meals...</p>;
+  }
 
-      setFetchedMeals(meals);
-    })();
-  }, []);
+  if (error) {
+    return <p>Something went wrong</p>;
+  }
 
   return (
     <ul id="meals">
