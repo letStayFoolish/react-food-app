@@ -234,6 +234,28 @@ h1 {
     color: #ffab04;
 }
 
+.error {
+    background-color: #ffe6e6; /* Light red background */
+    color: #d32f2f; /* Red text for error indication */
+    border: 1px solid #f44336; /* Red border */
+    border-radius: 8px; /* Rounded corners */
+    padding: 16px; /* Space inside the container */
+    max-width: 400px; /* Optional: limit width */
+    margin: 16px auto; /* Center on the page with some margin */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+.error h2 {
+    margin: 0 0 8px; /* Small space below the title */
+    font-size: 1.5rem; /* Slightly larger font for title */
+    font-weight: bold; /* Emphasize the title */
+}
+
+.error p {
+    margin: 0; /* Remove default margins */
+    font-size: 1rem; /* Standard readable font size */
+}
+
 .modal {
     background-color: #e4ddd4;
     border-radius: 6px;

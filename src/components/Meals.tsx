@@ -3,6 +3,8 @@ import { TMeal } from "../types";
 
 import MealItem from "./MealItem.tsx";
 import { useHttp } from "../hooks/useHttp.ts";
+// import { GET_ALL_MEALS } from "../config.ts";
+import ErrorComponent from "./ErrorComponent.tsx";
 import { GET_ALL_MEALS } from "../config.ts";
 
 const requestConfig: RequestInit = {};
@@ -15,11 +17,11 @@ const Meals: React.FC = () => {
   } = useHttp<TMeal[]>(GET_ALL_MEALS, requestConfig);
 
   if (isLoading) {
-    return <p>Fetching meals...</p>;
+    return <p className="center">Fetching meals...</p>;
   }
 
   if (error) {
-    return <p>Something went wrong</p>;
+    return <ErrorComponent title="Failed to fetch meals." message={error} />;
   }
 
   return (
